@@ -13,15 +13,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.BlockingQueue;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 @WebServlet(name = "MealServlet")
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ServiceImpl service = new ServiceImpl();
+        String description = req.getParameter("description");
+        LocalDateTime date = LocalDateTime.parse(req.getParameter("date"));
+        int calories = Integer.parseInt(req.getParameter("calories"));
+        Meal meal = new Meal(ServiceImpl.getId(), date, description, calories);
+        service.add(meal);
+        resp.sendRedirect("/topjava/meals");
 
     }
 

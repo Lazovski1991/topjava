@@ -33,7 +33,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h1>Meals</h1>
-<div><a href="/addMeals">Add Meal</a></div>
+<div><a href="${pageContext.request.contextPath}/addMeals.html">Add Meal</a></div>
 <br>
 <table>
     <tr class="head">
@@ -58,7 +58,7 @@
         <td text align="center">${cleanDate}</td>
         <td>${meal.getDescription()}</td>
         <td>${meal.getCalories()}</td>
-        <td><a href="/update">Update</a></td>
+        <td><a href="${pageContext.request.contextPath}/update.html">Update</a></td>
 
         <td><a href="${pageContext.request.contextPath}/meals?method=delete&id=${meal.getId()}">Delete</a></td>
     </tr>

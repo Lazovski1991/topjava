@@ -16,7 +16,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public void add(Meal meal) {
-
+        Meal.meals.add(meal);
     }
 
     @Override
