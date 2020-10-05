@@ -38,10 +38,10 @@
 <table>
     <tr class="head">
         <td width="150px ">Date</td>
-        <td>Description</td>
-        <td>Calories</td>
-        <td></td>
-        <td></td>
+        <td width="300px ">Description</td>
+        <td width="100px ">Calories</td>
+        <td width="100px "></td>
+        <td width="100px "></td>
     </tr>
 
     <c:forEach var="meal" items="${mealToList}">
@@ -59,7 +59,8 @@
         <td>${meal.getDescription()}</td>
         <td>${meal.getCalories()}</td>
         <td><a href="/update">Update</a></td>
-        <td><a href="/delete" onclick="">Delete</a></td>
+
+        <td><a href="${pageContext.request.contextPath}/meals?method=delete&id=${meal.getId()}">Delete</a></td>
     </tr>
     </c:forEach>
 </table>
