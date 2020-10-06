@@ -7,5 +7,5 @@ public interface Service {
 
     void add(Meal meal);
 
-    void update();
+    void update(Meal meal);
 }

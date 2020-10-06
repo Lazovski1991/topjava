@@ -20,8 +20,10 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public void update() {
-
+    public void update(Meal meal) {
+        Long id = meal.getId();
+        delete(id);
+        Meal.meals.add(meal);
     }
 
     public static long getId() {

@@ -58,9 +58,8 @@
         <td text align="center">${cleanDate}</td>
         <td>${meal.getDescription()}</td>
         <td>${meal.getCalories()}</td>
-        <td><a href="${pageContext.request.contextPath}/update.html">Update</a></td>
-
-        <td><a href="${pageContext.request.contextPath}/meals?method=delete&id=${meal.getId()}">Delete</a></td>
+        <td><a href="${pageContext.request.contextPath}/edit.jsp?id=${meal.getId()}">Update</a></td>
+        <td><a href="${pageContext.request.contextPath}/meals?id=${meal.getId()}">Delete</a></td>
     </tr>
     </c:forEach>
 </table>

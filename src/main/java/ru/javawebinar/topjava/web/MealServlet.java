@@ -25,19 +25,30 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServiceImpl service = new ServiceImpl();
-        String description = req.getParameter("description");
-        LocalDateTime date = LocalDateTime.parse(req.getParameter("date"));
-        int calories = Integer.parseInt(req.getParameter("calories"));
-        Meal meal = new Meal(ServiceImpl.getId(), date, description, calories);
-        service.add(meal);
-        resp.sendRedirect("/topjava/meals");
-
+        if (req.getParameter("id") != null && !req.getParameter("id").isEmpty()) {
+            ServiceImpl service = new ServiceImpl();
+            Long id = Long.parseLong(req.getParameter("id"));
+            String description = req.getParameter("description");
+            LocalDateTime date = LocalDateTime.parse(req.getParameter("date"));
+            int calories = Integer.parseInt(req.getParameter("calories"));
+            Meal meal = new Meal(id, date, description, calories);
+            service.update(meal);
+            log.debug("redirect to meals");
+            resp.sendRedirect("/topjava/meals");
+        } else {
+            ServiceImpl service = new ServiceImpl();
+            String description = req.getParameter("description");
+            LocalDateTime date = LocalDateTime.parse(req.getParameter("date"));
+            int calories = Integer.parseInt(req.getParameter("calories"));
+            Meal meal = new Meal(ServiceImpl.getId(), date, description, calories);
+            service.add(meal);
+            resp.sendRedirect("/topjava/meals");
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getParameter("method") != null && !request.getParameter("method").isEmpty()) {
+        if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
             ServiceImpl service = new ServiceImpl();
             service.delete(Long.parseLong(request.getParameter("id")));
             log.debug("redirect to meals");
