@@ -7,6 +7,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Arrays;
+
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -32,6 +36,12 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(NotFoundException.class)
     public ErrorInfo handleError(HttpServletRequest req, NotFoundException e) {
         return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BindException.class)
+    public ErrorInfo validError(HttpServletRequest req, BindingResult result) {
+        return logAndGetErrorInfo(req, result);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
@@ -60,6 +70,16 @@ public class ExceptionInfoHandler {
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, rootCause.toString());
+        return new ErrorInfo(req.getRequestURL(), e);
+    }
+
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, BindingResult result) {
+        String[] details = result.getFieldErrors().stream().map(fieldError -> fieldError.getField() + " "
+                + fieldError.getDefaultMessage()).toArray(String[]::new);
+
+        log.warn("Validation exception at request " + req.getRequestURL() + ": "
+                + Arrays.toString(details));
+
+        return new ErrorInfo(req.getRequestURL(), "Validation exception at request", details);
     }
 }
